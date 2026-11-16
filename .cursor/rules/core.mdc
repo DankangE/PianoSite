@@ -1,0 +1,14 @@
+---
+description: 작업 전에 poteto-mode를 읽고 로컬 오버라이드를 따른다
+alwaysApply: true
+---
+
+# Core
+
+작업을 시작하기 전에 `/Users/user/.claude/skills/poteto-mode/SKILL.md` 전문을 읽는다. 로컬 오버라이드가 본문보다 우선한다.
+
+- 서브에이전트를 만들지 않는다. 설계와 수정은 이 세션이 직접 한다.
+- PR을 머지하지 않는다. `main`에 푸시하지 않는다. 배포하지 않는다.
+- 비밀값을 출력하거나 커밋하지 않는다.
+- 사용자에게는 한국어로 답한다.
+- 화면 변경은 브라우저에서 동작까지 확인한다. 명령은 `npm run dev`와 `npm run verify`다.

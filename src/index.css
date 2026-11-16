@@ -1,0 +1,129 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
+@import "@fontsource/gowun-dodum/korean-400.css";
+@import "@fontsource/gowun-dodum/latin-400.css";
+@import "@fontsource/gowun-batang/korean-400.css";
+@import "@fontsource/gowun-batang/korean-700.css";
+@import "@fontsource/gowun-batang/latin-700.css";
+@import "@fontsource/jua/korean-400.css";
+@import "@fontsource/jua/latin-400.css";
+@import "@fontsource/noto-serif-kr/300.css";
+@import "@fontsource/noto-serif-kr/400.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, "Apple SD Gothic Neo", sans-serif;
+  --font-soft: "Gowun Dodum", "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", sans-serif;
+  --font-a-display: "Gowun Batang", "Apple Myungjo", serif;
+  --font-b-display: "Jua", "Pretendard Variable", sans-serif;
+  --font-c-display: "Noto Serif KR", "Apple Myungjo", serif;
+  --color-a-paper: #fbfaf6;
+  --color-a-card: #f1eee8;
+  --color-a-ink: #16171b;
+  --color-a-muted: #6b6862;
+  --color-a-rule: #dcd8d0;
+  --color-a-accent: #8c2232;
+  --color-b-bg: #fff7e8;
+  --color-b-ink: #1f1a24;
+  --color-b-yellow: #ffcf3a;
+  --color-b-coral: #ff6f59;
+  --color-b-sky: #5ab0ff;
+  --color-b-mint: #8fe0bb;
+  --color-c-deep: #0c1814;
+  --color-c-forest: #13241f;
+  --color-c-ivory: #f2ece0;
+  --color-c-brass: #c3a067;
+  --color-c-mist: #a3b2ab;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ink: var(--ink);
+  --color-paper: var(--paper);
+  --color-stage: var(--stage);
+  --radius-sm: calc(var(--radius) - 12px);
+  --radius-md: calc(var(--radius) - 8px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 12px);
+}
+
+:root {
+  --radius: 1rem;
+  --ink: #0f0e07;
+  --stage: #1d1c14;
+  --paper: #ffffff;
+  --background: var(--ink);
+  --foreground: #f4f2e8;
+  --card: var(--paper);
+  --card-foreground: var(--stage);
+  --popover: var(--stage);
+  --popover-foreground: #f4f2e8;
+  --primary: #ffed40;
+  --primary-foreground: var(--stage);
+  --secondary: #ffffff;
+  --secondary-foreground: var(--stage);
+  --muted: #36352c;
+  --muted-foreground: #a9a796;
+  --accent: #2a2920;
+  --accent-foreground: #f4f2e8;
+  --destructive: #e5484d;
+  --border: rgba(255, 255, 255, 0.12);
+  --input: rgba(255, 255, 255, 0.16);
+  --ring: #ffed40;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-snap-type: y proximity;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-soft);
+    line-height: 1.75;
+    letter-spacing: -0.005em;
+    word-break: keep-all;
+  }
+  h1,
+  h2,
+  h3,
+  nav,
+  button,
+  time,
+  dt,
+  [data-slot="button"],
+  [data-slot="badge"] {
+    font-family: var(--font-sans);
+  }
+  ::selection {
+    background: var(--primary);
+    color: var(--stage);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+    scroll-snap-type: none;
+  }
+}
