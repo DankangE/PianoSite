@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "pianosite.vercel.app" }],
+      "destination": "https://lovelynpf.vercel.app/$1",
+      "permanent": true
+    }
+  ]
+}
