@@ -291,7 +291,7 @@ export const contact = {
 }
 
 export function campusByPath(path: string) {
-  const clean = path.replace(/\/+$/, '')
+  const clean = path.replace(/(\/index\.html)?\/*$/, '')
   return campuses.find((campus) => campus.path === clean)
 }
 

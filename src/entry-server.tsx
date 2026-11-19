@@ -28,7 +28,7 @@ const escape = (value: string) =>
 function school(campus: Campus) {
   const url = pageUrl(campus.path)
   return {
-    '@type': ['MusicSchool', 'LocalBusiness'],
+    '@type': ['EducationalOrganization', 'LocalBusiness'],
     '@id': `${url}#school`,
     name: campus.name,
     description: campus.description,
