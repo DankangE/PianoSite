@@ -2,7 +2,11 @@ export type CampusId = 'guui' | 'lynn'
 
 export type Campus = {
   id: CampusId
+  path: `/${CampusId}`
   name: string
+  title: string
+  description: string
+  intro: string
   license: string
   owner: string
   phone: string
@@ -63,7 +67,7 @@ export const site = {
     '통기타레슨',
   ],
   image: '/photos/practice-room.jpg',
-  updated: '2026-11-13',
+  updated: '2026-11-19',
   googleVerification: 'KTR6EME1fvmmFI2fcaWDR2UCuAjxcWSgnQFUQ1nRDdc',
 }
 
@@ -80,6 +84,9 @@ export const ui = {
   kakao: '카카오톡 상담',
   place: '위치',
   schools: '가까운 학교',
+  home: '두 학원 함께 보기',
+  sibling: '함께 운영하는 학원',
+  more: '자세히 보기',
   blog: '블로그 보기',
   blogAll: '블로그 전체',
   blogFooter: '네이버 블로그',
@@ -224,7 +231,13 @@ export const stories: readonly Story[] = [
 export const campuses: readonly Campus[] = [
   {
     id: 'guui',
+    path: '/guui',
     name: '구의음악학원',
+    title: '구의음악학원 | 광진구 구의동 피아노학원 (아차산역)',
+    description:
+      '광진구 구의동 아차산역 3번 출구 가까이 있는 구의음악학원이에요. 엄마가 운영하는 피아노 전문 음악학원으로 어린이와 성인 피아노를 가르쳐요. 광진초, 경복초와 가까워요.',
+    intro:
+      '아차산역 3번 출구 가까이 있는 구의동 피아노 전문 음악학원이에요. 엄마가 운영하고, 자양동 린피아노와 같은 교재, 같은 방식으로 가르쳐요.',
     license: '제714호',
     owner: '엄마가 운영해요',
     phone: '02-447-6523',
@@ -243,7 +256,13 @@ export const campuses: readonly Campus[] = [
   },
   {
     id: 'lynn',
+    path: '/lynn',
     name: '린피아노',
+    title: '린피아노 | 광진구 자양동 피아노학원',
+    description:
+      '광진구 자양동 자양골목시장 부근 린피아노예요. 딸이 운영하는 피아노 전문 음악학원으로 어린이·성인 피아노와 1인 1연습실 레슨을 해요. 자양초, 성자초와 가까워요. 카카오톡 상담도 돼요.',
+    intro:
+      '자양골목시장 부근 자양동 피아노 전문 음악학원이에요. 딸이 운영하고, 구의동 구의음악학원과 같은 교재, 같은 방식으로 가르쳐요. 카카오톡으로도 상담할 수 있어요.',
     license: '신고 제89호',
     owner: '딸이 운영해요',
     phone: '02-2201-4079',
@@ -269,6 +288,11 @@ export const contact = {
   eyebrow: '상담',
   title: '가까운 학원으로 연락 주세요',
   body: '전화로 편하게 물어보세요. 린피아노는 카카오톡으로도 상담할 수 있어요.',
+}
+
+export function campusByPath(path: string) {
+  const clean = path.replace(/\/+$/, '')
+  return campuses.find((campus) => campus.path === clean)
 }
 
 export function telHref(phone: string) {
