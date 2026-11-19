@@ -12,6 +12,8 @@ for (const c of campuses) {
     `${c.name} 지도 링크: ${c.map.href}`,
   )
   check(c.schools.length > 0, `${c.name} 가까운 학교가 비었습니다`)
+  check(c.path === `/${c.id}`, `${c.name} 페이지 주소는 /${c.id}여야 합니다: ${c.path}`)
+  check(c.title.startsWith(`${c.name} | `), `${c.name} 페이지 제목은 학원 이름으로 시작해야 합니다: ${c.title}`)
 }
 check(new Set(campuses.map((c) => c.id)).size === campuses.length, '학원 id가 겹칩니다')
 

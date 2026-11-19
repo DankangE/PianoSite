@@ -1,9 +1,10 @@
-import { ArrowUpRight, Guitar, MessageCircle, Phone } from 'lucide-react'
+import { ArrowLeft, ArrowUpRight, Guitar, MessageCircle, Phone } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
   about,
   blog,
   brand,
+  type Campus,
   campuses,
   contact,
   formatDate,
@@ -41,6 +42,40 @@ export function Playful() {
   )
 }
 
+export function CampusPage({ campus }: { campus: Campus }) {
+  const sibling = campuses.find((other) => other.id !== campus.id)
+  return (
+    <div className="bg-b-bg text-b-ink selection:bg-b-yellow">
+      <Header home="/" />
+      <main>
+        <Screen id="top" className="pt-24 pb-12">
+          <Shell className="grid items-center gap-10 py-6 md:grid-cols-[1fr_1.1fr]">
+            <div>
+              <span className="inline-block -rotate-2 rounded-full border-2 border-b-ink bg-b-mint px-3 py-1 font-b-display">
+                {campus.area} · {campus.landmark}
+              </span>
+              <h1 className="mt-5 font-b-display text-[clamp(2.75rem,6vw,4.5rem)] leading-[1.15]">{campus.name}</h1>
+              <p className="mt-4 max-w-md text-[17px] leading-[1.8]">{campus.intro}</p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <a href="/" className={cn(chunky, 'bg-white')}>
+                  <ArrowLeft className="size-4" /> {ui.home}
+                </a>
+                {sibling && (
+                  <a href={sibling.path} className={cn(chunky, 'bg-b-sky text-white')}>
+                    {ui.sibling} {sibling.name}
+                  </a>
+                )}
+              </div>
+            </div>
+            <CampusCard campus={campus} />
+          </Shell>
+        </Screen>
+        <Lessons />
+      </main>
+    </div>
+  )
+}
+
 function KeysMark() {
   return (
     <span aria-hidden className="flex h-7 overflow-hidden rounded-md border-2 border-b-ink bg-white">
@@ -66,7 +101,7 @@ function Keys({ className }: { className?: string }) {
   )
 }
 
-function Header() {
+function Header({ home = '' }: { home?: string }) {
   return (
     <header className="fixed inset-x-0 top-3 z-40">
       <Shell>
@@ -77,18 +112,18 @@ function Header() {
             'rounded-full shadow-[3px_3px_0_var(--color-b-ink)]',
           )}
         >
-          <a href="#top" className="flex items-center gap-2 font-b-display text-lg">
+          <a href={home || '#top'} className="flex items-center gap-2 font-b-display text-lg">
             <KeysMark />
             <span className="hidden sm:inline">{brand.name}</span>
           </a>
           <nav className="hidden items-center gap-6 font-b-display text-lg md:flex">
             {nav.slice(0, -1).map((item) => (
-              <a key={item.id} href={`#${item.id}`} className="hover:text-b-coral">
+              <a key={item.id} href={`${home}#${item.id}`} className="hover:text-b-coral">
                 {item.label}
               </a>
             ))}
           </nav>
-          <a href="#contact" className={cn(chunky, 'h-10 bg-b-coral px-4 text-base text-white')}>
+          <a href={`${home}#contact`} className={cn(chunky, 'h-10 bg-b-coral px-4 text-base text-white')}>
             {ui.contactCta}
           </a>
         </div>
@@ -172,12 +207,23 @@ function About() {
           </figcaption>
         </figure>
         {campuses.map((campus, i) => (
-          <div key={campus.id} className={cn('p-6 text-white', box, i === 0 ? 'bg-b-coral' : 'bg-b-sky')}>
-            <p className="font-b-display text-3xl">{campus.name}</p>
+          <a
+            key={campus.id}
+            href={campus.path}
+            className={cn(
+              'group block p-6 text-white transition-transform hover:-translate-y-0.5',
+              box,
+              i === 0 ? 'bg-b-coral' : 'bg-b-sky',
+            )}
+          >
+            <h3 className="font-b-display text-3xl">{campus.name}</h3>
             <p className="mt-2 text-[15px]">
               {campus.area.replace('광진구 ', '')} · {campus.owner}
             </p>
-          </div>
+            <span className="mt-3 inline-flex items-center gap-1 text-sm underline-offset-4 group-hover:underline">
+              {campus.name} {ui.more} <ArrowUpRight className="size-4" />
+            </span>
+          </a>
         ))}
       </Shell>
     </Screen>
@@ -308,45 +354,7 @@ function Contact() {
         </div>
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           {campuses.map((campus) => (
-            <article key={campus.id} className={cn('bg-white p-2', box)}>
-              <Out
-                href={campus.map.href}
-                className="relative block overflow-hidden rounded-[18px] border-2 border-b-ink"
-              >
-                <img
-                  loading="lazy"
-                  src={campus.map.image}
-                  alt={`${campus.name} 위치 지도, ${campus.address}`}
-                  className="aspect-[4/3] w-full object-cover lg:aspect-[2/1]"
-                />
-                <span className="absolute top-2 left-2 rounded-full border-2 border-b-ink bg-b-yellow px-3 py-0.5 font-b-display text-sm">
-                  {campus.map.label} ↗
-                </span>
-                <span className="absolute right-2 bottom-1 text-[10px] text-b-ink/50">{campus.map.credit}</span>
-              </Out>
-              <div className="px-4 pt-4 pb-4">
-                <div className="flex items-start justify-between gap-3">
-                  <h3 className="font-b-display text-3xl">{campus.name}</h3>
-                  <span className="rounded-full border-2 border-b-ink px-2.5 py-0.5 text-xs">{campus.license}</span>
-                </div>
-                <p className="mt-1 text-sm">
-                  {campus.address} · {campus.landmark}
-                </p>
-                <p className="text-sm text-b-ink/60">
-                  {ui.schools} {campus.schools.join(', ')}
-                </p>
-                <div className="mt-4 flex flex-wrap gap-3">
-                  <a href={telHref(campus.phone)} className={cn(chunky, 'bg-b-yellow')}>
-                    <Phone className="size-4" /> {campus.phone}
-                  </a>
-                  {campus.kakao && (
-                    <Out href={campus.kakao} className={cn(chunky, 'bg-b-ink text-white')}>
-                      <MessageCircle className="size-4" /> {ui.kakao}
-                    </Out>
-                  )}
-                </div>
-              </div>
-            </article>
+            <CampusCard key={campus.id} campus={campus} />
           ))}
         </div>
       </Shell>
@@ -365,5 +373,53 @@ function Contact() {
         </Out>
       </Shell>
     </Screen>
+  )
+}
+
+function CampusCard({ campus }: { campus: Campus }) {
+  return (
+    <article className={cn('bg-white p-2', box)}>
+      <Out
+        href={campus.map.href}
+        className="relative block overflow-hidden rounded-[18px] border-2 border-b-ink"
+      >
+        <img
+          loading="lazy"
+          src={campus.map.image}
+          alt={`${campus.name} 위치 지도, ${campus.address}`}
+          className="aspect-[4/3] w-full object-cover lg:aspect-[2/1]"
+        />
+        <span className="absolute top-2 left-2 rounded-full border-2 border-b-ink bg-b-yellow px-3 py-0.5 font-b-display text-sm">
+          {campus.map.label} ↗
+        </span>
+        <span className="absolute right-2 bottom-1 text-[10px] text-b-ink/50">{campus.map.credit}</span>
+      </Out>
+      <div className="px-4 pt-4 pb-4">
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="font-b-display text-3xl">
+            <a href={campus.path} className="hover:text-b-coral">
+              {campus.name}
+            </a>
+          </h3>
+          <span className="rounded-full border-2 border-b-ink px-2.5 py-0.5 text-xs">{campus.license}</span>
+        </div>
+        <p className="mt-1 text-sm">
+          {campus.address} · {campus.landmark}
+        </p>
+        <p className="text-sm text-b-ink/60">
+          {ui.schools} {campus.schools.join(', ')}
+        </p>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <a href={telHref(campus.phone)} className={cn(chunky, 'bg-b-yellow')}>
+            <Phone className="size-4" /> {campus.phone}
+          </a>
+          {campus.kakao && (
+            <Out href={campus.kakao} className={cn(chunky, 'bg-b-ink text-white')}>
+              <MessageCircle className="size-4" /> {ui.kakao}
+            </Out>
+          )}
+        </div>
+      </div>
+    </article>
   )
 }
