@@ -1,6 +1,6 @@
 import { renderToString } from 'react-dom/server'
 import { App } from '@/App'
-import { blog, brand, campuses, site, type Campus } from '@/model'
+import { blog, brand, campuses, fees, site, type Campus } from '@/model'
 
 export { site }
 
@@ -14,6 +14,12 @@ export const pages: readonly Page[] = [
     description: campus.description,
     campus,
   })),
+  {
+    path: fees.path,
+    title: fees.title,
+    description: fees.description,
+    campus: campuses.find((campus) => campus.id === fees.campusId),
+  },
 ]
 
 const pageUrl = (path: string) => (path === '/' ? `${site.url}/` : site.url + path)
@@ -46,6 +52,14 @@ function school(campus: Campus) {
     ...(campus.geo && {
       geo: { '@type': 'GeoCoordinates', latitude: campus.geo.lat, longitude: campus.geo.lng },
     }),
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: campus.hours.days.map((day) => `https://schema.org/${day}`),
+        opens: campus.hours.opens,
+        closes: campus.hours.closes,
+      },
+    ],
     areaServed: campus.area,
     hasMap: campus.map.href,
     sameAs: [blog, campus.map.href, campus.kakao, campus.instagram].filter(Boolean),
@@ -72,7 +86,7 @@ function structuredData(page: Page) {
           description: page.description,
           inLanguage: 'ko-KR',
           isPartOf: { '@id': website['@id'] },
-          about: { '@id': `${pageUrl(page.path)}#school` },
+          about: { '@id': `${pageUrl(page.campus.path)}#school` },
         },
         school(page.campus),
       ]

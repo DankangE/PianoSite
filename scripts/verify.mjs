@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs'
-import { about, blog, campuses, hero, nav, programs, stories } from '../src/model.ts'
+import { about, blog, campuses, fees, hero, nav, programs, stories } from '../src/model.ts'
 
 const problems = []
 const check = (ok, message) => ok || problems.push(message)
@@ -14,7 +14,18 @@ for (const c of campuses) {
   check(c.schools.length > 0, `${c.name} 가까운 학교가 비었습니다`)
   check(c.path === `/${c.id}`, `${c.name} 페이지 주소는 /${c.id}여야 합니다: ${c.path}`)
   check(c.title.startsWith(`${c.name} | `), `${c.name} 페이지 제목은 학원 이름으로 시작해야 합니다: ${c.title}`)
+  const { days, opens, closes } = c.hours
+  check(days.length > 0 && /^\d{2}:\d{2}$/.test(opens) && /^\d{2}:\d{2}$/.test(closes) && opens < closes, `${c.name} 운영 시간: ${opens}-${closes}`)
 }
+
+const feeCampus = campuses.find((c) => c.id === fees.campusId)
+check(feeCampus && fees.path.startsWith(`${feeCampus.path}/`), `강습비 페이지 주소: ${fees.path}`)
+check(fees.title.startsWith(`${feeCampus?.name} `), `강습비 페이지 제목은 학원 이름으로 시작해야 합니다: ${fees.title}`)
+check(fees.title.includes('참고용'), '강습비 페이지 제목에 참고용 표시가 없습니다')
+check(fees.rows.length > 0, '강습비 표가 비었습니다')
+for (const r of fees.rows) check(/^\d+만원$/.test(r.fee) && /^\d+시간( \d+분)?$/.test(r.hours), `강습비 형식: ${r.course} ${r.hours} ${r.fee}`)
+for (const d of [fees.asOf, fees.checked]) check(/^\d{4}-\d{2}-\d{2}$/.test(d), `강습비 날짜 형식: ${d}`)
+check(fees.source.href.startsWith('https://academy.kbizin.com/'), `강습비 출처 링크: ${fees.source.href}`)
 check(new Set(campuses.map((c) => c.id)).size === campuses.length, '학원 id가 겹칩니다')
 
 for (const s of stories) {
