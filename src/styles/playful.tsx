@@ -203,9 +203,14 @@ function Header({ home = '' }: { home?: string }) {
               {ui.fees}
             </a>
           </nav>
-          <a href={`${home}#contact`} className={cn(chunky, 'h-10 bg-b-coral px-4 text-base text-white')}>
-            {ui.contactCta}
-          </a>
+          <div className="flex items-center gap-2">
+            <a href={fees.path} className={cn(chunky, 'h-10 bg-white px-4 text-base md:hidden')}>
+              {ui.fees}
+            </a>
+            <a href={`${home}#contact`} className={cn(chunky, 'h-10 bg-b-coral px-4 text-base text-white')}>
+              {ui.contactCta}
+            </a>
+          </div>
         </div>
       </Shell>
     </header>
