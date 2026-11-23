@@ -16,9 +16,9 @@ export type OpeningHours = {
   closes: string
 }
 
-// 사용자가 시간(10시~7시)만 정했고 요일은 정하지 않아 월~토로 뒀어요. 바뀌면 여기만 고쳐요.
+// 사용자가 정한 운영 시간: 월~금 10시~7시. 바뀌면 여기만 고쳐요.
 export const openingHours: OpeningHours = {
-  days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+  days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
   opens: '10:00',
   closes: '19:00',
 }
