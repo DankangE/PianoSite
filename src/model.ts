@@ -1,5 +1,28 @@
 export type CampusId = 'guui' | 'lynn'
 
+export const weekdays = {
+  Monday: '월',
+  Tuesday: '화',
+  Wednesday: '수',
+  Thursday: '목',
+  Friday: '금',
+  Saturday: '토',
+  Sunday: '일',
+} as const
+
+export type OpeningHours = {
+  days: readonly (keyof typeof weekdays)[]
+  opens: string
+  closes: string
+}
+
+// 사용자가 정한 운영 시간: 월~금 10시~7시. 바뀌면 여기만 고쳐요.
+export const openingHours: OpeningHours = {
+  days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+  opens: '10:00',
+  closes: '19:00',
+}
+
 export type Campus = {
   id: CampusId
   path: `/${CampusId}`
@@ -16,6 +39,7 @@ export type Campus = {
   address: string
   street: string
   postalCode: string
+  hours: OpeningHours
   instagram?: string
   geo?: { lat: number; lng: number }
   map: { image: string; href: string; label: string; credit: string }
@@ -67,7 +91,7 @@ export const site = {
     '통기타레슨',
   ],
   image: '/photos/practice-room.jpg',
-  updated: '2026-11-19',
+  updated: '2026-11-23',
   googleVerification: 'KTR6EME1fvmmFI2fcaWDR2UCuAjxcWSgnQFUQ1nRDdc',
 }
 
@@ -83,6 +107,9 @@ export const ui = {
   call: '전화하기',
   kakao: '카카오톡 상담',
   place: '위치',
+  hours: '운영 시간',
+  fees: '강습비',
+  feesCta: '강습비 참고',
   schools: '가까운 학교',
   home: '두 학원 함께 보기',
   sibling: '함께 운영하는 학원',
@@ -243,9 +270,10 @@ export const campuses: readonly Campus[] = [
     phone: '02-447-6523',
     area: '광진구 구의동',
     landmark: '아차산역 3번 출구',
-    address: '서울 광진구 자양로41길 7, 2층',
-    street: '자양로41길 7, 2층',
+    address: '서울특별시 광진구 자양로41길 7, 2층 (구의동)',
+    street: '자양로41길 7, 2층 (구의동)',
     postalCode: '04992',
+    hours: openingHours,
     map: {
       image: '/maps/guui.jpg',
       href: 'https://place.map.kakao.com/13604791',
@@ -269,9 +297,10 @@ export const campuses: readonly Campus[] = [
     kakao: 'https://pf.kakao.com/_AmxexcT',
     area: '광진구 자양동',
     landmark: '자양골목시장 부근',
-    address: '서울 광진구 자양로13길 87-1, 2층',
-    street: '자양로13길 87-1, 2층',
+    address: '서울특별시 광진구 자양로13길 87-1, 2층 (자양동)',
+    street: '자양로13길 87-1, 2층 (자양동)',
     postalCode: '05061',
+    hours: openingHours,
     instagram: 'https://www.instagram.com/guuimusic_lynpiano',
     geo: { lat: 37.5328541, lng: 127.0803811 },
     map: {
@@ -290,9 +319,75 @@ export const contact = {
   body: '전화로 편하게 물어보세요. 린피아노는 카카오톡으로도 상담할 수 있어요.',
 }
 
+export type Fee = { course: string; hours: string; fee: string }
+
+// 학원인(academy.kbizin.com)에 올라온 서울시교육청 신고 교습비를 그대로 옮겼어요.
+// 월 교습 시간과 총교습비는 원자료 표기 그대로예요. 숫자를 지어내거나 고치지 않아요.
+// 반 이름 '드럼'은 원자료에 '그럼'으로 적혀 있던 것을 사용자 요청으로 고쳤어요(같은 줄: 13시간 39분, 13만원).
+export const fees = {
+  campusId: 'guui' as CampusId,
+  path: '/guui/fees',
+  title: '구의음악학원 강습비 (참고용) | 광진구 구의동 피아노학원',
+  description:
+    '구의음악학원이 서울특별시교육청에 신고한 1개월 과정 교습비를 참고용으로 모았어요. 초급·중급·상급·고급·입시 피아노와 기타, 플룻 반의 월 교습 시간과 총교습비를 볼 수 있어요.',
+  eyebrow: '참고용 강습비',
+  heading: '구의음악학원 교습비',
+  body: '교육청에 신고된 1개월 과정 반의 월 교습 시간과 총교습비예요. 상담 전에 대략 살펴볼 수 있도록 옮겨 두었어요.',
+  asOf: '2026-01-01',
+  checked: '2026-11-22',
+  source: {
+    label: '학원인 · 구의음악학원 원비',
+    href: 'https://academy.kbizin.com/seoul/academy/1000042456',
+  },
+  registry: {
+    label: '서울특별시교육청 학원 교습비 등 정보공개',
+    href: 'https://buseo.sen.go.kr/buseo/bu14/user/bbs/BD_selectBbsList.do?q_bbsSn=1328',
+  },
+  notes: [
+    '참고용이에요. 교습비는 바뀔 수 있으니 등록 전에 학원에 꼭 전화로 확인해 주세요.',
+    '반 이름과 금액은 교육청 공개 자료를 따랐어요. 교재비 같은 비용은 따로 들 수 있어요.',
+    '린피아노 강습비는 이 표에 없어요. 린피아노에 직접 물어봐 주세요.',
+  ],
+  labels: { asOf: '교육청 공개 자료', basis: '기준', checked: '학원인 반영', source: '출처', registry: '원자료' },
+  columns: { course: '반', hours: '월 교습 시간', fee: '총교습비(월)' },
+  rows: [
+    { course: '초급피아노', hours: '11시간 12분', fee: '11만원' },
+    { course: '초급피아노', hours: '12시간 36분', fee: '12만원' },
+    { course: '초급피아노', hours: '21시간', fee: '13만원' },
+    { course: '중급피아노', hours: '11시간 54분', fee: '12만원' },
+    { course: '중급피아노', hours: '13시간 39분', fee: '13만원' },
+    { course: '중급피아노', hours: '21시간', fee: '14만원' },
+    { course: '상급피아노', hours: '14시간 42분', fee: '14만원' },
+    { course: '상급피아노', hours: '21시간', fee: '15만원' },
+    { course: '고급피아노', hours: '21시간', fee: '16만원' },
+    { course: '입시피아노', hours: '31시간 30분', fee: '35만원' },
+    { course: '입시피아노', hours: '42시간', fee: '45만원' },
+    { course: '기타', hours: '13시간 39분', fee: '13만원' },
+    { course: '플룻', hours: '13시간 39분', fee: '13만원' },
+    { course: '드럼', hours: '13시간 39분', fee: '13만원' },
+    { course: '드럼특강', hours: '1시간 24분', fee: '1만원' },
+  ] satisfies readonly Fee[],
+}
+
+const cleanPath = (path: string) => path.replace(/(\/index\.html)?\/*$/, '')
+
 export function campusByPath(path: string) {
-  const clean = path.replace(/(\/index\.html)?\/*$/, '')
+  const clean = cleanPath(path)
   return campuses.find((campus) => campus.path === clean)
+}
+
+export function isFeesPath(path: string) {
+  return cleanPath(path) === fees.path
+}
+
+export function formatHours({ days, opens, closes }: OpeningHours) {
+  const week = Object.keys(weekdays)
+  const run = days.every((day, i) => i === 0 || week.indexOf(day) === week.indexOf(days[i - 1]) + 1)
+  const label =
+    run && days.length > 2
+      ? `${weekdays[days[0]]}~${weekdays[days[days.length - 1]]}`
+      : days.map((day) => weekdays[day]).join('·')
+  return `${label} ${opens}~${closes}`
 }
 
 export function telHref(phone: string) {

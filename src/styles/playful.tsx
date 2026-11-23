@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowUpRight, Guitar, MessageCircle, Phone } from 'lucide-react'
+import { ArrowLeft, ArrowUpRight, Clock, Guitar, MessageCircle, Phone, Receipt } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
   about,
@@ -7,7 +7,9 @@ import {
   type Campus,
   campuses,
   contact,
+  fees,
   formatDate,
+  formatHours,
   hero,
   lessons,
   nav,
@@ -76,6 +78,81 @@ export function CampusPage({ campus }: { campus: Campus }) {
   )
 }
 
+export function FeesPage() {
+  const campus = campuses.find((other) => other.id === fees.campusId)!
+  return (
+    <div className="bg-b-bg text-b-ink selection:bg-b-yellow">
+      <Header home="/" />
+      <main>
+        <section id="top" className="pt-28 pb-16">
+          <Shell className="max-w-3xl">
+            <span className="inline-block -rotate-2 rounded-full border-2 border-b-ink bg-b-mint px-3 py-1 font-b-display">
+              {fees.eyebrow}
+            </span>
+            <h1 className="mt-5 font-b-display text-[clamp(2.4rem,6vw,4rem)] leading-[1.15]">{fees.heading}</h1>
+            <p className="mt-4 max-w-xl text-[17px] leading-[1.8]">{fees.body}</p>
+            <p className="mt-3 text-sm text-b-ink/70">
+              {fees.labels.asOf} {formatDate(fees.asOf)} {fees.labels.basis} · {fees.labels.checked}{' '}
+              {formatDate(fees.checked)}
+            </p>
+            <div className={cn('mt-8 overflow-x-auto bg-white', box)}>
+              <table className="w-full text-left text-[15px]">
+                <thead className="bg-b-yellow font-b-display">
+                  <tr className="border-b-2 border-b-ink">
+                    <th scope="col" className="px-3 sm:px-4 py-3 font-normal">
+                      {fees.columns.course}
+                    </th>
+                    <th scope="col" className="px-3 sm:px-4 py-3 font-normal">
+                      {fees.columns.hours}
+                    </th>
+                    <th scope="col" className="px-3 sm:px-4 py-3 text-right font-normal">
+                      {fees.columns.fee}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {fees.rows.map((row) => (
+                    <tr key={row.course + row.hours} className="border-b border-b-ink/15 last:border-b-0">
+                      <th scope="row" className="px-3 sm:px-4 py-2.5 font-normal">
+                        {row.course}
+                      </th>
+                      <td className="px-3 sm:px-4 py-2.5 whitespace-nowrap">{row.hours}</td>
+                      <td className="px-3 sm:px-4 py-2.5 text-right font-b-display whitespace-nowrap">{row.fee}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <ul className="mt-6 list-disc space-y-1.5 pl-5 text-sm leading-[1.7]">
+              {fees.notes.map((note) => (
+                <li key={note}>{note}</li>
+              ))}
+            </ul>
+            <p className="mt-4 text-sm leading-[1.7]">
+              {fees.labels.source}{' '}
+              <Out href={fees.source.href} className="underline underline-offset-4">
+                {fees.source.label}
+              </Out>
+              {` · ${fees.labels.registry} `}
+              <Out href={fees.registry.href} className="underline underline-offset-4">
+                {fees.registry.label}
+              </Out>
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a href={telHref(campus.phone)} className={cn(chunky, 'bg-b-yellow')}>
+                <Phone className="size-4" /> {campus.phone}
+              </a>
+              <a href={campus.path} className={cn(chunky, 'bg-white')}>
+                <ArrowLeft className="size-4" /> {campus.name}
+              </a>
+            </div>
+          </Shell>
+        </section>
+      </main>
+    </div>
+  )
+}
+
 function KeysMark() {
   return (
     <span aria-hidden className="flex h-7 overflow-hidden rounded-md border-2 border-b-ink bg-white">
@@ -122,6 +199,9 @@ function Header({ home = '' }: { home?: string }) {
                 {item.label}
               </a>
             ))}
+            <a href={fees.path} className="hover:text-b-coral">
+              {ui.fees}
+            </a>
           </nav>
           <a href={`${home}#contact`} className={cn(chunky, 'h-10 bg-b-coral px-4 text-base text-white')}>
             {ui.contactCta}
@@ -364,7 +444,7 @@ function Contact() {
             <p key={campus.id}>
               {campus.name}
               {' · '}
-              {campus.address} · {campus.phone} · {campus.license}
+              {campus.address} · {campus.phone} · {formatHours(campus.hours)} · {campus.license}
             </p>
           ))}
         </address>
@@ -406,6 +486,9 @@ function CampusCard({ campus }: { campus: Campus }) {
         <p className="mt-1 text-sm">
           {campus.address} · {campus.landmark}
         </p>
+        <p className="mt-1 flex items-center gap-1.5 text-sm">
+          <Clock className="size-3.5 shrink-0" /> {ui.hours} {formatHours(campus.hours)}
+        </p>
         <p className="text-sm text-b-ink/60">
           {ui.schools} {campus.schools.join(', ')}
         </p>
@@ -417,6 +500,11 @@ function CampusCard({ campus }: { campus: Campus }) {
             <Out href={campus.kakao} className={cn(chunky, 'bg-b-ink text-white')}>
               <MessageCircle className="size-4" /> {ui.kakao}
             </Out>
+          )}
+          {campus.id === fees.campusId && (
+            <a href={fees.path} className={cn(chunky, 'bg-white')}>
+              <Receipt className="size-4" /> {ui.feesCta}
+            </a>
           )}
         </div>
       </div>
