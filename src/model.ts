@@ -322,7 +322,8 @@ export const contact = {
 export type Fee = { course: string; hours: string; fee: string }
 
 // 학원인(academy.kbizin.com)에 올라온 서울시교육청 신고 교습비를 그대로 옮겼어요.
-// 반 이름, 월 교습 시간, 총교습비는 원자료 표기 그대로예요. 숫자를 지어내거나 고치지 않아요.
+// 월 교습 시간과 총교습비는 원자료 표기 그대로예요. 숫자를 지어내거나 고치지 않아요.
+// 반 이름 '드럼'은 원자료에 '그럼'으로 적혀 있던 것을 사용자 요청으로 고쳤어요(같은 줄: 13시간 39분, 13만원).
 export const fees = {
   campusId: 'guui' as CampusId,
   path: '/guui/fees',
@@ -344,7 +345,7 @@ export const fees = {
   },
   notes: [
     '참고용이에요. 교습비는 바뀔 수 있으니 등록 전에 학원에 꼭 전화로 확인해 주세요.',
-    '반 이름과 금액은 교육청 공개 자료 표기 그대로예요. 교재비 같은 비용은 따로 들 수 있어요.',
+    '반 이름과 금액은 교육청 공개 자료를 따랐어요. 교재비 같은 비용은 따로 들 수 있어요.',
     '린피아노 강습비는 이 표에 없어요. 린피아노에 직접 물어봐 주세요.',
   ],
   labels: { asOf: '교육청 공개 자료', basis: '기준', checked: '학원인 반영', source: '출처', registry: '원자료' },
@@ -363,7 +364,7 @@ export const fees = {
     { course: '입시피아노', hours: '42시간', fee: '45만원' },
     { course: '기타', hours: '13시간 39분', fee: '13만원' },
     { course: '플룻', hours: '13시간 39분', fee: '13만원' },
-    { course: '그럼', hours: '13시간 39분', fee: '13만원' },
+    { course: '드럼', hours: '13시간 39분', fee: '13만원' },
     { course: '드럼특강', hours: '1시간 24분', fee: '1만원' },
   ] satisfies readonly Fee[],
 }
