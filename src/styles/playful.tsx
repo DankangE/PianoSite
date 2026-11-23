@@ -95,17 +95,17 @@ export function FeesPage() {
               {fees.labels.asOf} {formatDate(fees.asOf)} {fees.labels.basis} · {fees.labels.checked}{' '}
               {formatDate(fees.checked)}
             </p>
-            <div className={cn('mt-8 overflow-hidden bg-white', box)}>
+            <div className={cn('mt-8 overflow-x-auto bg-white', box)}>
               <table className="w-full text-left text-[15px]">
                 <thead className="bg-b-yellow font-b-display">
                   <tr className="border-b-2 border-b-ink">
-                    <th scope="col" className="px-4 py-3 font-normal">
+                    <th scope="col" className="px-3 sm:px-4 py-3 font-normal">
                       {fees.columns.course}
                     </th>
-                    <th scope="col" className="px-4 py-3 font-normal">
+                    <th scope="col" className="px-3 sm:px-4 py-3 font-normal">
                       {fees.columns.hours}
                     </th>
-                    <th scope="col" className="px-4 py-3 text-right font-normal">
+                    <th scope="col" className="px-3 sm:px-4 py-3 text-right font-normal">
                       {fees.columns.fee}
                     </th>
                   </tr>
@@ -113,11 +113,11 @@ export function FeesPage() {
                 <tbody>
                   {fees.rows.map((row) => (
                     <tr key={row.course + row.hours} className="border-b border-b-ink/15 last:border-b-0">
-                      <th scope="row" className="px-4 py-2.5 font-normal">
+                      <th scope="row" className="px-3 sm:px-4 py-2.5 font-normal">
                         {row.course}
                       </th>
-                      <td className="px-4 py-2.5 whitespace-nowrap">{row.hours}</td>
-                      <td className="px-4 py-2.5 text-right font-b-display whitespace-nowrap">{row.fee}</td>
+                      <td className="px-3 sm:px-4 py-2.5 whitespace-nowrap">{row.hours}</td>
+                      <td className="px-3 sm:px-4 py-2.5 text-right font-b-display whitespace-nowrap">{row.fee}</td>
                     </tr>
                   ))}
                 </tbody>
